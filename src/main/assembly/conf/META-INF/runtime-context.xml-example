@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+      "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <!-- Konfiguracja dostępu do bazy danych - należy zmodyfikować elementy url, username i password -->
+    <bean id="slipDAOdataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://192.168.56.5/fps" />
+        <property name="username" value="root" />
+        <property name="password" value="password" />
+    </bean>
+	   
+    <!-- Definicja drukarki fiskalnej - należy zmodyfikować element class oraz argument, czyli nazwę portu szeregowego -->
+    <!-- Możliwe wartości parametru class:
+            name.prokop.bart.fps.drivers.BogusFiscalPrinter, 
+            name.prokop.bart.fps.drivers.DFEmul,
+            name.prokop.bart.fps.drivers.ElzabMera,
+            name.prokop.bart.fps.drivers.ElzabOmega2,
+            name.prokop.bart.fps.drivers.InnovaProfit451,
+            name.prokop.bart.fps.drivers.OptimusVivo,
+            name.prokop.bart.fps.drivers.Posnet101,
+            name.prokop.bart.fps.drivers.Thermal101,
+            name.prokop.bart.fps.drivers.Thermal203,
+            name.prokop.bart.fps.drivers.Thermal301,
+            name.prokop.bart.fps.drivers.ThermalOld
+    -->
+    <!-- Można zdefiniować wiele tych elementów, muszą mieć unikalne id -->
+    <bean id="bogusFiscalPrinter" class="name.prokop.bart.fps.drivers.BogusFiscalPrinter" factory-method="getFiscalPrinter">
+        <constructor-arg value="COM1" />
+    </bean>
+	
+    <!-- Definicja wątku, który będzie obsługiwał drukarkę fiskalną -->
+    <!-- Można zdefiniować wiele tych elementów, muszą mieć unikalne id, a ref musi odnosić się do unikalnej drukarki (elementy powyżej) -->
+    <bean class="name.prokop.bart.fps.server.FiscalPrinterThread">
+        <!-- Nazwa drukarki fiskalnej -->
+        <constructor-arg value="XX99" />
+        <!-- Referencja na zdefiniowaną wyżej drukarkę fiskalną -->
+        <property name="fiscalPrinter" ref="bogusFiscalPrinter" />
+    </bean>
+
+    <!-- Odkomentuj poniższe trzy elementy (zaczynające się na task) aby uruchomić wydruk raportu dobowego o 23:55 -->
+    <task:scheduler id="taskScheduler"/>
+    <task:executor id="taskExecutor" pool-size="1"/>
+    <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler"/>	
+
+    <!-- Połaczenie bazy danych z JDBC Template -->
+    <bean id="slipDAOjdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+        <constructor-arg ref="slipDAOdataSource" />
+    </bean>
+</beans>

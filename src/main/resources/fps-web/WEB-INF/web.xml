@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>fps</display-name>
+    <description>Fiscal Printer Server</description>
+    <welcome-file-list>
+        <welcome-file>healthCheck</welcome-file>
+    </welcome-file-list>
+
+    <!-- This will make all answers compressed, if client supports it. -->    
+    <filter>
+        <filter-name>GzipFilter</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.GzipFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- This is an example of giving some JVM insternal information to external world -->
+    <servlet>
+        <servlet-name>BasicHealthCheckServlet</servlet-name>
+        <servlet-class>name.prokop.bart.runtime.jetty.BasicHealthCheckServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BasicHealthCheckServlet</servlet-name>
+        <url-pattern>/healthCheck</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Fiscal Printer Servlet that prints request context on Fiscal Printer -->
+    <servlet>
+        <servlet-name>FiscalPrinterServlet</servlet-name>
+        <servlet-class>name.prokop.bart.fps.server.FiscalPrinterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FiscalPrinterServlet</servlet-name>
+        <url-pattern>/printSlip</url-pattern>
+    </servlet-mapping>
+</web-app>
