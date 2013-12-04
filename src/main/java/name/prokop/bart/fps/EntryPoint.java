@@ -10,7 +10,7 @@
  */
 package name.prokop.bart.fps;
 
-import name.prokop.bart.runtime.RuntimeEngineDaemon;
+import name.prokop.bart.runtime.RuntimeEntryPoint;
 
 /**
  * @author @author <a href="mailto:prokop.bart@gmailcom">Bartłomiej Prokop</a>
@@ -18,6 +18,6 @@ import name.prokop.bart.runtime.RuntimeEngineDaemon;
 public class EntryPoint {
 
     public static void main(String... args) throws Exception {
-        RuntimeEngineDaemon.cmdLineEntryPoint();
+        RuntimeEntryPoint.main(args);
     }
 }
