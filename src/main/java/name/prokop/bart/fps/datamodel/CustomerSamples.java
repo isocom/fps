@@ -16,7 +16,7 @@ package name.prokop.bart.fps.datamodel;
  */
 public class CustomerSamples {
 
-    public static Slip kamilSzarmach() {
+    public static Slip example1() {
         Slip slip = new Slip();
         slip.setReference("R-k 0123456789");
         slip.setCashbox("XX99");

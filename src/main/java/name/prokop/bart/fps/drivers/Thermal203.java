@@ -35,7 +35,9 @@ import name.prokop.bart.fps.util.PortEnumerator;
 import name.prokop.bart.fps.util.ToString;
 
 /**
- * Klasa implementująca obsługę drukarki fiskalnej POSNET THERMAL z protokołem w wersji 1.01
+ * Klasa implementująca obsługę drukarki fiskalnej POSNET THERMAL z protokołem w
+ * wersji 1.01
+ *
  * @author Bartłomiej Piotr Prokop
  */
 public class Thermal203 implements FiscalPrinter {
@@ -53,9 +55,7 @@ public class Thermal203 implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getTestSlip());
-            //fp.printTest();
-            //fp.printDailyReport();
+            fp.print(Slip.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -64,12 +64,17 @@ public class Thermal203 implements FiscalPrinter {
     public static FiscalPrinter getFiscalPrinter(String comPortName) {
         return new Thermal203(comPortName);
     }
-    /** Creates a new instance of PosnetThermal101 */
+    /**
+     * Creates a new instance of PosnetThermal101
+     */
     String comPortName;
 
     /**
-     * Tworzy obiekt zdolny do wymuszenia na drukarce fiskalnej Posnet 1.01 wydruku paragonu fiskalnego, zapisanego w klasie Slip
-     * @param comPortName Nazwa portu szeregowego, do którego jest przyłączona drukarka fiskalna.
+     * Tworzy obiekt zdolny do wymuszenia na drukarce fiskalnej Posnet 1.01
+     * wydruku paragonu fiskalnego, zapisanego w klasie Slip
+     *
+     * @param comPortName Nazwa portu szeregowego, do którego jest przyłączona
+     * drukarka fiskalna.
      */
     private Thermal203(String comPortName) {
         this.comPortName = comPortName;
@@ -80,8 +85,10 @@ public class Thermal203 implements FiscalPrinter {
 
     /**
      * Służy do wydrukowania paragonu fiskalnego
+     *
      * @param slip paragon do wydrukowania
-     * @throws name.prokop.bart.hardware.fiscalprinter.FiscalPrinterException w przypadku niepowodzenia, wraz z opisem błędu
+     * @throws name.prokop.bart.hardware.fiscalprinter.FiscalPrinterException w
+     * przypadku niepowodzenia, wraz z opisem błędu
      */
     @Override
     public synchronized void print(Slip slip) throws FiscalPrinterException {
@@ -529,7 +536,7 @@ public class Thermal203 implements FiscalPrinter {
                 footLine1 + "\r" + // linia dodatkowa 1
                 footLine2 + "\r" + // linia dodatkowa 2
                 footLine3 + "\r" // linia dodatkowa 3
-                );
+        );
 
         sendPrefix();
         try {
@@ -665,7 +672,7 @@ public class Thermal203 implements FiscalPrinter {
                 cash + "/" + // WPŁATA
                 pfa + // Formy płanosci
                 "0/" // RESZTA
-                );
+        );
 
         sendPrefix();
         try {
@@ -692,24 +699,12 @@ public class Thermal203 implements FiscalPrinter {
         }
         return reference;
     }
-    private static String footLine1 = "Serwer wydruku fiskalnego wersja 1.3";
-    private static String footLine2 = "(c) 2001-2010 http://www.ttsoft.pl/";
-    private static String footLine3 = "driver: PosnetThermal v. 2.03";
+    private final static String footLine1 = "Serwer wydruku fiskalnego wersja 2.0";
+    private final static String footLine2 = "(c)2014 http://fps.bart.prokop.name/";
+    private final static String footLine3 = "Sterownik: PosnetThermal 2.03";
 
-    public static void setFootLine1(String line) {
-        footLine1 = line;
-    }
-
-    public static void setFootLine2(String line) {
-        footLine2 = line;
-    }
-
-    public static void setFootLine3(String line) {
-        footLine3 = line;
-    }
     ////////////// Sekwencje obslugo paragonu //////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
-
     private void sendLBSERM(byte ps) throws FiscalPrinterException {
         if (!printerConnected) {
             throw new FiscalPrinterException("Brak komunikacji z drukarką.");
@@ -834,6 +829,7 @@ public class Thermal203 implements FiscalPrinter {
 
     /**
      * Informacyjna postać tekstowa o stanie urządzenia fiskalnego
+     *
      * @return Zwraca stan drukarki - status flag.
      */
     @Override
@@ -1130,4 +1126,3 @@ public class Thermal203 implements FiscalPrinter {
         }
     }
 }
-

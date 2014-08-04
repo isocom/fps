@@ -54,8 +54,7 @@ public class Thermal101 implements FiscalPrinter {
         }
 
         try {
-            //fp.print(Slip.getSampleSlip());
-            fp.print(Slip.getTestSlip());
+            fp.print(Slip.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -497,7 +496,7 @@ public class Thermal101 implements FiscalPrinter {
                 cash + "/" + // WPŁATA
                 pfa + // Formy płanosci
                 "0/" // RESZTA
-                );
+        );
 
         sendPrefix();
         try {
@@ -516,27 +515,9 @@ public class Thermal101 implements FiscalPrinter {
         sendDLE();
         sendENQ();
     }
-    private static String footLine1;
-    private static String footLine2;
-    private static String footLine3;
-
-    static {
-        footLine1 = "line1";
-        footLine2 = "line2";
-        footLine3 = "line3";
-    }
-
-    public static void setFootLine1(String line) {
-        footLine1 = line;
-    }
-
-    public static void setFootLine2(String line) {
-        footLine2 = line;
-    }
-
-    public static void setFootLine3(String line) {
-        footLine3 = line;
-    }
+    private final static String footLine1 = "Serwer wydruku fiskalnego wersja 2.0";
+    private final static String footLine2 = "(c)2014 http://fps.bart.prokop.name/";
+    private final static String footLine3 = "Sterownik: PosnetThermal 1.01";
 
     private void sendLBSERM(byte ps) throws FiscalPrinterException {
         if (!printerConnected) {

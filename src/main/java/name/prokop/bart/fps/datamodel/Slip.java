@@ -26,6 +26,16 @@ import org.json.JSONObject;
  */
 public class Slip {
 
+    public static Slip getOneCent22() {
+        Slip slip = new Slip();
+        slip.setReference("R-k 0123456789");
+        slip.setCashbox("XX99");
+        slip.setCashierName("Bartek Prokop");
+        slip.addLine("Test drukarki", 1, 0.01, VATRate.VAT22);
+        slip.addPayment(SlipPayment.PaymentType.Cash, 0.01, null);
+        return slip;
+    }
+
     /**
      * Generuje testowy paragon, z obrotem 1 gr. i VAT wynoszącym 0,00 zł
      *

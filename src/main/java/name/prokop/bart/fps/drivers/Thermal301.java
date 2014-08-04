@@ -56,11 +56,7 @@ public class Thermal301 implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getTestSlip());
-            //fp.print(Slip.getSampleSlip());
-            fp.openDrawer();
-            //fp.printTest();
-            //fp.printDailyReport();
+            fp.print(Slip.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -83,9 +79,6 @@ public class Thermal301 implements FiscalPrinter {
      */
     private Thermal301(String comPortName) {
         this.comPortName = comPortName;
-        footLine1 = "&b&c&hDziękujemy";
-        footLine2 = "&c&bZapraszamy ponownie";
-        footLine3 = "&i&cThermal 3.01";
     }
     private SerialPort serialPort;
     private OutputStream outputStream;
@@ -533,7 +526,7 @@ public class Thermal301 implements FiscalPrinter {
                 f2(cash) + "/" + // WPŁATA
                 pfa + // Formy płanosci
                 "0/" // RESZTA
-                );
+        );
 
         sendPrefix();
         try {
@@ -558,9 +551,9 @@ public class Thermal301 implements FiscalPrinter {
         }
         return reference;
     }
-    private final String footLine1;
-    private final String footLine2;
-    private final String footLine3;
+    private final static String footLine1 = "Serwer wydruku fiskalnego wersja 2.0";
+    private final static String footLine2 = "(c)2014 http://fps.bart.prokop.name/";
+    private final static String footLine3 = "Sterownik: PosnetThermal 3.01";
 
     ////////////// Sekwencje obslugo paragonu //////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
