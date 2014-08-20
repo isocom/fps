@@ -51,7 +51,7 @@ public enum VATRate {
      * Nowa stawka 5%
      */
     VAT05(0.05);
-    private double vatRate;
+    private final double vatRate;
 
     private VATRate(double vatRate) {
         this.vatRate = vatRate;
@@ -88,36 +88,4 @@ public enum VATRate {
 
     }
 
-    public static VATRate decodeDelphi(String rate) {
-        try {
-//            System.out.print("irate = "+rate);
-            double parseDouble = Double.parseDouble(rate);
-            parseDouble *= 100.0;
-            int irate = (int) parseDouble;
-//            System.out.print("irate = "+irate);
-            switch (irate) {
-                case 22:
-                    return VAT22;
-                case 7:
-                    return VAT07;
-                case 0:
-                    return VAT00;
-                case 3:
-                    return VAT03;
-                case 23:
-                    return VAT23;
-                case 8:
-                    return VAT08;
-                case 5:
-                    return VAT05;
-                case -100:
-                    return VATzw;
-                default:
-                    return VAT22;
-            }
-        } catch (Exception e) {
-//            System.err.print(e.getMessage());
-            return VAT22;
-        }
-    }
 }

@@ -30,6 +30,7 @@ public class TestDBInvoiceSave {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(RuntimeProperties.INSTANCE.getSpringContext());

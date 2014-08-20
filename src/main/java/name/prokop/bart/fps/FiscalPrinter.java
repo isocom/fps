@@ -15,7 +15,6 @@ package name.prokop.bart.fps;
 import java.lang.reflect.Method;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.Slip;
-import name.prokop.bart.fps.drivers.BogusFiscalPrinter;
 import name.prokop.bart.fps.drivers.DFEmul;
 import name.prokop.bart.fps.drivers.ElzabMera;
 import name.prokop.bart.fps.drivers.ElzabOmega2;
@@ -35,7 +34,6 @@ public interface FiscalPrinter {
 
     public static enum Type {
 
-        BogusFiscalPrinter(BogusFiscalPrinter.class, "Konsola Java"),
         DFEmul(DFEmul.class, "Emulator"),
         ElzabMera(ElzabMera.class, "Elzab Mera"),
         ElzabOmega2(ElzabOmega2.class, "Elzab Omega 2"),

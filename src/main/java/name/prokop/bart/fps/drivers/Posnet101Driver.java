@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -107,6 +108,24 @@ public class Posnet101Driver {
             if (!cmd.equals(receive().trim())) {
                 logger.severe("Cannot print daily report");
                 throw new FiscalPrinterException("Cannot print daily report");
+            }
+        } catch (IOException ioe) {
+            logger.severe(ioe.getMessage());
+            throw new FiscalPrinterException(ioe);
+        }
+    }
+
+    public void printMonthlyReport() throws FiscalPrinterException {
+        final String cmd = "monthlyrep";
+        try {
+            send("prncancel" + TAB);
+            logger.fine(receive());
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, -1);
+            send(cmd + TAB + "da" + BartDate.getFormatedDate("yyyy-MM-dd", calendar.getTime()) + TAB);
+            if (!cmd.equals(receive().trim())) {
+                logger.severe("Cannot print monthly report");
+                throw new FiscalPrinterException("Cannot print monthly report");
             }
         } catch (IOException ioe) {
             logger.severe(ioe.getMessage());
@@ -316,8 +335,8 @@ public class Posnet101Driver {
     private String cnf(String nazwaKasjera, String numerKasy, String reference) {
         StringBuilder sb = new StringBuilder();
         sb.append("ftrcfg").append(TAB);
-        sb.append("cc").append(nazwaKasjera).append(TAB);
-        sb.append("cn").append(numerKasy).append(TAB);
+        sb.append("cc").append(nazwaKasjera.length() > 32 ? nazwaKasjera.substring(0, 32) : nazwaKasjera).append(TAB);
+        sb.append("cn").append(numerKasy.length() > 8 ? numerKasy.substring(0, 8) : numerKasy).append(TAB);
         sb.append("sn").append(reference.length() > 30 ? reference.substring(0, 30) : reference).append(TAB);
         sb.append("bc").append(reference.length() > 16 ? reference.substring(0, 16) : reference).append(TAB);
         sb.append("ln").append(footerLine1).append("\n").append(footerLine2).append("\n").append(footerLine3).append(TAB);

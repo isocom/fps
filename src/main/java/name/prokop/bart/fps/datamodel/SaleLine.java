@@ -32,16 +32,19 @@ public class SaleLine {
     public SaleLine(String name, double amount, double price, VATRate taxRate) {
         this.name = name;
         this.amount = amount;
-        this.price = price;
+        this.price = BPMath.roundCurrency(price);
         this.taxRate = taxRate;
     }
 
     public SaleLine(String name, double amount, double price, VATRate taxRate, DiscountType discountType, double discount) {
         this.name = name;
         this.amount = amount;
-        this.price = price;
+        this.price = BPMath.roundCurrency(price);
         this.taxRate = taxRate;
         this.discountType = discountType;
+        if (discountType == DiscountType.AmountDiscount || discountType == DiscountType.AmountExtra) {
+            discount = BPMath.roundCurrency(discount);
+        }
         this.discount = discount;
     }
 
