@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
  * @author bart
  */
 public class FiscalPrinterThread implements Runnable {
-
+    
     private final static Logger LOGGER = LoggerFactory.getLogger(FiscalPrinterThread.class);
     private final String printerName;
     @Autowired
@@ -36,35 +36,37 @@ public class FiscalPrinterThread implements Runnable {
     private InvoiceDAO invoiceTools;
     private boolean terminate = false;
     private FiscalPrinter fiscalPrinter;
-
+    
     public FiscalPrinterThread(String printerName) {
         this.printerName = printerName;
         LOGGER.info("new Fiscal Printer Thread was setup, for printer named: " + printerName + ".");
     }
-
+    
     String getPrinterName() {
         return printerName;
     }
-
+    
     public FiscalPrinter getFiscalPrinter() {
         return fiscalPrinter;
     }
-
+    
     public void setFiscalPrinter(FiscalPrinter fiscalPrinter) {
         this.fiscalPrinter = fiscalPrinter;
     }
-
+    
     @PostConstruct
     private void start() {
-        new Thread(this).start();
+        Thread thread = new Thread(this);
+        thread.setDaemon(true);
+        thread.start();
     }
-
+    
     @PreDestroy
     private void terminate() {
         terminate = true;
     }
 
-    @Scheduled(cron = "* 55 23 * * ?")
+//    @Scheduled(cron = "* 55 23 * * ?")
 //    @Scheduled(cron = "* * * * * ?")
     private void printDailyReport() {
         try {
@@ -73,7 +75,7 @@ public class FiscalPrinterThread implements Runnable {
             fpe.printStackTrace(System.out);
         }
     }
-
+    
     @Override
     public void run() {
         while (!terminate) {
@@ -81,7 +83,7 @@ public class FiscalPrinterThread implements Runnable {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
             }
-
+            
             String slipToPrint = slipTools.findSlipToPrint(printerName);
             if (slipToPrint != null) {
                 System.err.println("Paragon do druku: " + slipToPrint);
@@ -99,7 +101,7 @@ public class FiscalPrinterThread implements Runnable {
                     slipTools.markAsErrored(slipToPrint, e.getMessage());
                 }
             }
-
+            
             String invoiceToPrint = invoiceTools.findInvoiceToPrint(printerName);
             if (invoiceToPrint != null) {
                 System.err.println("Paragon do druku: " + invoiceToPrint);

@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>name.prokop.bart</groupId>
-    <artifactId>fps</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>name.prokop.bart.fps</groupId>
+    <artifactId>fps-server</artifactId>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>Fiscal Printer Server</name>
@@ -14,10 +14,8 @@
     <description>Fiscal Printer Library</description>
     
     <properties>
+        <start-class>name.prokop.bart.fps.EntryPoint</start-class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format> -->
-        <debian.artifact.name>${project.build.finalName}</debian.artifact.name>
-        <debian.artifact.version>${maven.build.timestamp}</debian.artifact.version>
     </properties>
 
     <developers>
@@ -35,20 +33,50 @@
         </site>
     </distributionManagement>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>        
-        </pluginRepository>
-    </pluginRepositories>
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-    </repositories>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.1.3.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>name.prokop.bart.rxtx</groupId>
+            <artifactId>rxtx</artifactId>
+            <version>2.2.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>        
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- TESTS -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <extensions>
@@ -69,36 +97,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-jarsigner-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <id>sign</id>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <keystore>codesign.jks</keystore>
-                    <alias>bart</alias>
-                    <storepass>q12q12q</storepass>
-                    <keypass>secret</keypass>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--<plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.4</version>
@@ -114,43 +115,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/dist.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>name.prokop.bart</groupId>
-            <artifactId>runtime</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>name.prokop.bart.rxtx</groupId>
-            <artifactId>rxtx</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
-        </dependency>
-        
-        <!-- TESTS -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-        </dependency>
-    </dependencies>
 </project>

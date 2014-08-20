@@ -10,14 +10,31 @@
  */
 package name.prokop.bart.fps;
 
-import name.prokop.bart.runtime.RuntimeEntryPoint;
+import javax.sql.DataSource;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.system.ApplicationPidListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * @author @author <a href="mailto:prokop.bart@gmailcom">Bartłomiej Prokop</a>
  */
+@Configuration
+@ComponentScan
+@ImportResource("file:fps-server.xml")
 public class EntryPoint {
 
     public static void main(String... args) throws Exception {
-        RuntimeEntryPoint.main(args);
+        SpringApplication springApplication = new SpringApplication(EntryPoint.class);
+        springApplication.addListeners(new ApplicationPidListener("fps-server.pid"));
+        springApplication.run(args);
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }

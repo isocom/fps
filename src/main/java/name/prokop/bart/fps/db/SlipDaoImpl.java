@@ -38,7 +38,6 @@ public class SlipDaoImpl implements SlipDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SlipDaoImpl.class);
     @Autowired
-    @Qualifier("slipDAOjdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     @Override

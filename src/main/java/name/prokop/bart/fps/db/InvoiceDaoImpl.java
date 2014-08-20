@@ -37,7 +37,6 @@ public class InvoiceDaoImpl implements InvoiceDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceDaoImpl.class);
     @Autowired
-    @Qualifier("slipDAOjdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     @Override
