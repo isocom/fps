@@ -7,7 +7,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <!-- Konfiguracja dostepu do bazy danych - nalezy zmodyfikowac elementy url, username i password -->
-    <bean id="slipDAOdataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="slipDAOdataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://192.168.56.11/fps" />
         <property name="username" value="root" />
@@ -29,7 +29,7 @@
             name.prokop.bart.fps.drivers.ThermalOld
     -->
     <!-- Mozna zdefiniowac wiele tych elementow, musza jednak miec unikalne id -->
-    <bean id="posnet" class="name.prokop.bart.fps.drivers.Posnet101" factory-method="getFiscalPrinter">
+    <bean id="posnet" class="name.prokop.bart.fps.drivers.Thermal203" factory-method="getFiscalPrinter">
         <constructor-arg value="COM1" />
     </bean>
 	

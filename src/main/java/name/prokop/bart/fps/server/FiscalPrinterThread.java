@@ -20,14 +20,13 @@ import name.prokop.bart.fps.db.SlipDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  *
  * @author bart
  */
 public class FiscalPrinterThread implements Runnable {
-    
+
     private final static Logger LOGGER = LoggerFactory.getLogger(FiscalPrinterThread.class);
     private final String printerName;
     @Autowired
@@ -36,31 +35,31 @@ public class FiscalPrinterThread implements Runnable {
     private InvoiceDAO invoiceTools;
     private boolean terminate = false;
     private FiscalPrinter fiscalPrinter;
-    
+
     public FiscalPrinterThread(String printerName) {
         this.printerName = printerName;
         LOGGER.info("new Fiscal Printer Thread was setup, for printer named: " + printerName + ".");
     }
-    
+
     String getPrinterName() {
         return printerName;
     }
-    
+
     public FiscalPrinter getFiscalPrinter() {
         return fiscalPrinter;
     }
-    
+
     public void setFiscalPrinter(FiscalPrinter fiscalPrinter) {
         this.fiscalPrinter = fiscalPrinter;
     }
-    
+
     @PostConstruct
     private void start() {
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.start();
     }
-    
+
     @PreDestroy
     private void terminate() {
         terminate = true;
@@ -68,14 +67,13 @@ public class FiscalPrinterThread implements Runnable {
 
 //    @Scheduled(cron = "* 55 23 * * ?")
 //    @Scheduled(cron = "* * * * * ?")
-    private void printDailyReport() {
-        try {
-            fiscalPrinter.printDailyReport();
-        } catch (Exception fpe) {
-            fpe.printStackTrace(System.out);
-        }
-    }
-    
+//    private void printDailyReport() {
+//        try {
+//            fiscalPrinter.printDailyReport();
+//        } catch (Exception fpe) {
+//            fpe.printStackTrace(System.out);
+//        }
+//    }
     @Override
     public void run() {
         while (!terminate) {
@@ -83,15 +81,21 @@ public class FiscalPrinterThread implements Runnable {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
             }
-            
+
+            long time = System.currentTimeMillis();
             String slipToPrint = slipTools.findSlipToPrint(printerName);
+            System.out.println("Znalezienie paragonu do druku: " + (System.currentTimeMillis() - time) + " ms.");
             if (slipToPrint != null) {
-                System.err.println("Paragon do druku: " + slipToPrint);
+                System.out.println("Paragon do druku: " + slipToPrint);
                 try {
+                    time = System.currentTimeMillis();
                     Slip readedSlip = slipTools.readSlip(slipToPrint);
+                    System.out.println("Odczytanie paragonu do druku: " + (System.currentTimeMillis() - time) + " ms.");
                     if (readedSlip != null) {
                         synchronized (this) {
+                            time = System.currentTimeMillis();
                             fiscalPrinter.print(readedSlip);
+                            System.out.println("Wydruk paragonu: " + (System.currentTimeMillis() - time) + " ms.");
                         }
                         slipTools.markAsPrinted(slipToPrint);
                     }
@@ -101,7 +105,7 @@ public class FiscalPrinterThread implements Runnable {
                     slipTools.markAsErrored(slipToPrint, e.getMessage());
                 }
             }
-            
+
             String invoiceToPrint = invoiceTools.findInvoiceToPrint(printerName);
             if (invoiceToPrint != null) {
                 System.err.println("Paragon do druku: " + invoiceToPrint);
