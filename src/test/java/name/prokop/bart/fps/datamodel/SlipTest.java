@@ -20,7 +20,7 @@ public class SlipTest {
 
     @Test
     public void testSomeMethod() throws JSONException {
-        Slip slip = Slip.getSampleSlip();
+        Slip slip = SlipExamples.getSampleSlip();
         String s1 = slip.toJSONObject().toString(3);
         System.out.println(s1);
         slip = new Slip(new JSONObject(s1));

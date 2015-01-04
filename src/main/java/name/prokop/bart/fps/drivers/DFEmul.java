@@ -27,6 +27,7 @@ import name.prokop.bart.fps.datamodel.DiscountType;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
 import name.prokop.bart.fps.util.BitsAndBytes;
@@ -50,11 +51,11 @@ public class DFEmul implements FiscalPrinter {
         if (args.length != 0) {
             fp = (DFEmul) DFEmul.getFiscalPrinter(args[0]);
         } else {
-            fp = (DFEmul) DFEmul.getFiscalPrinter("COM101");
+            fp = (DFEmul) DFEmul.getFiscalPrinter("COM61");
         }
 
         try {
-            fp.print(Slip.getTestSlip());
+            fp.print(SlipExamples.getOneCentSlip());
             //fp.printTest();
             //fp.printDailyReport();
         } catch (FiscalPrinterException e) {
@@ -522,7 +523,7 @@ public class DFEmul implements FiscalPrinter {
                 footLine1 + "\r" + // linia dodatkowa 1
                 footLine2 + "\r" + // linia dodatkowa 2
                 footLine3 + "\r" // linia dodatkowa 3
-                );
+        );
 
         sendPrefix();
         try {
@@ -605,7 +606,6 @@ public class DFEmul implements FiscalPrinter {
         if (!printerConnected) {
             return;
         }
-
 
         byte[] seq = ToString.string2Mazovia("1;0$eX01\r" + total + "/" + total + "/");
 

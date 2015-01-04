@@ -10,8 +10,6 @@
  */
 package name.prokop.bart.fps.datamodel;
 
-import name.prokop.bart.fps.util.BPMath;
-
 /**
  * Stawki podatku VAT używane przez logikę programu
  *
@@ -83,7 +81,7 @@ public enum VATRate {
             case VATzw:
                 return "ZW";
             default:
-                return BPMath.round(getVatRate() * 100.0, 0) + "%";
+                return Toolbox.round(getVatRate() * 100.0, 0) + "%";
         }
 
     }

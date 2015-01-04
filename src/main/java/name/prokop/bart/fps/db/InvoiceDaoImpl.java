@@ -67,7 +67,7 @@ public class InvoiceDaoImpl implements InvoiceDAO {
         try {
             retVal = jdbcTemplate.queryForObject(sql, String.class);
         } catch (DataAccessException dae) {
-            LOGGER.info("No invoice to print");
+            LOGGER.debug("No invoice to print");
             return null;
         }
         if (retVal != null) {

@@ -26,6 +26,7 @@ import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
 import name.prokop.bart.fps.util.BitsAndBytes;
@@ -58,7 +59,7 @@ public class OptimusVivo implements FiscalPrinter {
 
         try {
             //fp.openDrawer();
-            fp.print(Slip.getTestSlip());
+            fp.print(SlipExamples.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -244,7 +245,6 @@ public class OptimusVivo implements FiscalPrinter {
         }
 
         //System.err.println(buffer);
-
         if (timeout > 0) {
             return buffer.toString();
         } else {
@@ -457,7 +457,7 @@ public class OptimusVivo implements FiscalPrinter {
                 cash + "/" + // WPŁATA
                 pfa + // Formy płanosci
                 "0/" // RESZTA
-                );
+        );
 
         sendPrefix();
         try {
@@ -530,7 +530,6 @@ public class OptimusVivo implements FiscalPrinter {
 //        if (err != 0)
 //            throw new FiscalPrinterException("sendLBFSTRQ " + this + " "+ getErrDescription(err));
 //            System.err.println("1111");
-
         sendDLE();
         sendENQ();
     }

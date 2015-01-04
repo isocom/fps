@@ -21,7 +21,6 @@ import name.prokop.bart.fps.datamodel.VATRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -68,7 +67,7 @@ public class SlipDaoImpl implements SlipDAO {
         try {
             retVal = jdbcTemplate.queryForObject(sql, String.class);
         } catch (DataAccessException dae) {
-            LOGGER.info("No slip to print");
+            LOGGER.debug("No slip to print");
             return null;
         }
         if (retVal != null) {

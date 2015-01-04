@@ -21,14 +21,15 @@ import name.prokop.bart.fps.datamodel.DiscountType;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.VATRate;
-import name.prokop.bart.fps.util.BPMath;
 import name.prokop.bart.fps.util.BitsAndBytes;
 import name.prokop.bart.fps.util.PortEnumerator;
 import name.prokop.bart.fps.util.ToString;
 
 /**
  * Sterownik do drukarki ELZAB MERA
+ *
  * @author Bart
  */
 public class ElzabMera implements FiscalPrinter {
@@ -46,7 +47,7 @@ public class ElzabMera implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getTestSlip());
+            fp.print(SlipExamples.getOneCentSlip());
             //fp.print(Slip.getSampleSlip());
             //fp.print(Slip.getTestNoDiscountSlip());
             //fp.print(Slip.getOneCentSlip());
@@ -252,9 +253,9 @@ public class ElzabMera implements FiscalPrinter {
 
     /**
      * Sprawdzenie gotowości do pracy
-     * 
+     *
      * @return drukarka gotowa do wydruku paragonu
-     * @throws FiscalPrinterException 
+     * @throws FiscalPrinterException
      */
     private boolean checkPrinter() throws FiscalPrinterException {
         boolean retVal = true;
@@ -411,22 +412,22 @@ public class ElzabMera implements FiscalPrinter {
     }
 
     private static int countAmountPrecision(double d) throws FiscalPrinterException {
-        if (BPMath.round(d, 4) != d) {
+        if (Toolbox.round(d, 4) != d) {
             throw new FiscalPrinterException("Reduce amount precision");
         }
-        if (BPMath.round(d, 0) == d) {
+        if (Toolbox.round(d, 0) == d) {
             return 0;
         }
-        if (BPMath.round(d, 1) == d) {
+        if (Toolbox.round(d, 1) == d) {
             return 1;
         }
-        if (BPMath.round(d, 2) == d) {
+        if (Toolbox.round(d, 2) == d) {
             return 2;
         }
-        if (BPMath.round(d, 3) == d) {
+        if (Toolbox.round(d, 3) == d) {
             return 3;
         }
-        if (BPMath.round(d, 4) == d) {
+        if (Toolbox.round(d, 4) == d) {
             return 4;
         }
         return 0;
@@ -459,9 +460,9 @@ public class ElzabMera implements FiscalPrinter {
 
     /**
      * Wysyła linijkę paragonu do drukarki
-     * 
+     *
      * @param slipLine linijka paragonu
-     * @throws FiscalPrinterException 
+     * @throws FiscalPrinterException
      */
     private void printLine(SaleLine slipLine) throws FiscalPrinterException {
         double amount = slipLine.getAmount();
@@ -471,7 +472,6 @@ public class ElzabMera implements FiscalPrinter {
         int total = (int) (100 * slipLine.getGross() + 0.000001);
 
         //System.out.println(amount + " / " + amountPrecision + " " + amountInteger);
-
         sendToPrinter(new byte[]{0x1B, 0x06, 0x20}); // Esc,06H,20H
         sendToPrinter(prepareName(slipLine.getName())); // K1,....K28
         sendToPrinter(new byte[]{0x00}); // A1

@@ -24,6 +24,7 @@ import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
 import name.prokop.bart.fps.util.BitsAndBytes;
@@ -31,7 +32,9 @@ import name.prokop.bart.fps.util.PortEnumerator;
 import name.prokop.bart.fps.util.ToString;
 
 /**
- * Klasa implementująca obsługę drukarki fiskalnej POSNET THERMAL z protokołem w wersji 1.01
+ * Klasa implementująca obsługę drukarki fiskalnej POSNET THERMAL z protokołem w
+ * wersji 1.01
+ *
  * @author Bartłomiej Piotr Prokop
  */
 public class InnovaProfit451 implements FiscalPrinter {
@@ -49,7 +52,7 @@ public class InnovaProfit451 implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getSampleSlip());
+            fp.print(SlipExamples.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -58,12 +61,17 @@ public class InnovaProfit451 implements FiscalPrinter {
     public static FiscalPrinter getFiscalPrinter(String comPortName) {
         return new InnovaProfit451(comPortName);
     }
-    /** Creates a new instance of PosnetThermal101 */
+    /**
+     * Creates a new instance of PosnetThermal101
+     */
     String comPortName;
 
     /**
-     * Tworzy obiekt zdolny do wymuszenia na drukarce fiskalnej Posnet 1.01 wydruku paragonu fiskalnego, zapisanego w klasie Slip
-     * @param comPortName Nazwa portu szeregowego, do którego jest przyłączona drukarka fiskalna.
+     * Tworzy obiekt zdolny do wymuszenia na drukarce fiskalnej Posnet 1.01
+     * wydruku paragonu fiskalnego, zapisanego w klasie Slip
+     *
+     * @param comPortName Nazwa portu szeregowego, do którego jest przyłączona
+     * drukarka fiskalna.
      */
     private InnovaProfit451(String comPortName) {
         this.comPortName = comPortName;
@@ -74,8 +82,10 @@ public class InnovaProfit451 implements FiscalPrinter {
 
     /**
      * Służy do wydrukowania paragonu fiskalnego
+     *
      * @param slip paragon do wydrukowania
-     * @throws name.prokop.bart.hardware.fiscalprinter.FiscalPrinterException w przypadku niepowodzenia, wraz z opisem błędu
+     * @throws name.prokop.bart.hardware.fiscalprinter.FiscalPrinterException w
+     * przypadku niepowodzenia, wraz z opisem błędu
      */
     @Override
     public synchronized void print(Slip slip) throws FiscalPrinterException {
@@ -412,7 +422,7 @@ public class InnovaProfit451 implements FiscalPrinter {
                 "http://www.tt-soft.com/\r" + // linia dodatkowa 3
                 "0/" + // wplata
                 total + "/" // total
-                );
+        );
 
         sendPrefix();
         try {
@@ -467,7 +477,7 @@ public class InnovaProfit451 implements FiscalPrinter {
                 "0/" + // Przyjęcie
                 "0/" + // Wydanie
                 "0/" // Reszta
-                );
+        );
 
         sendPrefix();
         try {
@@ -528,10 +538,7 @@ public class InnovaProfit451 implements FiscalPrinter {
                 "01\r" + // Łańcuch zawierający maksymalnie 2 cyfry lub spacje identyfikujący rok ważności karty płatniczej
                 "3AL2455\r" + //Łańcuch o maksymalnej długości 9 znaków identyfikujący numer autoryzacji
                 amount + "/" // Kwota/wartość transakcji
-                );
-
-
-
+        );
 
         sendPrefix();
         try {
@@ -728,6 +735,7 @@ public class InnovaProfit451 implements FiscalPrinter {
 
     /**
      * Informacyjna postać tekstowa o stanie urządzenia fiskalnego
+     *
      * @return Zwraca stan drukarki - status flag.
      */
     @Override

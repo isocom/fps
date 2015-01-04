@@ -10,8 +10,6 @@
  */
 package name.prokop.bart.fps.datamodel;
 
-import name.prokop.bart.fps.util.BPMath;
-
 /**
  *
  * @author Bart
@@ -32,18 +30,18 @@ public class SaleLine {
     public SaleLine(String name, double amount, double price, VATRate taxRate) {
         this.name = name;
         this.amount = amount;
-        this.price = BPMath.roundCurrency(price);
+        this.price = Toolbox.roundCurrency(price);
         this.taxRate = taxRate;
     }
 
     public SaleLine(String name, double amount, double price, VATRate taxRate, DiscountType discountType, double discount) {
         this.name = name;
         this.amount = amount;
-        this.price = BPMath.roundCurrency(price);
+        this.price = Toolbox.roundCurrency(price);
         this.taxRate = taxRate;
         this.discountType = discountType;
         if (discountType == DiscountType.AmountDiscount || discountType == DiscountType.AmountExtra) {
-            discount = BPMath.roundCurrency(discount);
+            discount = Toolbox.roundCurrency(discount);
         }
         this.discount = discount;
     }
@@ -54,14 +52,14 @@ public class SaleLine {
      * @return Wartość brutto danej pozycji paragonu
      */
     public double getGross() {
-        return BPMath.roundCurrency(amount * price);
+        return Toolbox.roundCurrency(amount * price);
     }
 
     public double getTax() {
         double r = getTotal();
         r /= 1 + taxRate.getVatRate();
         r *= taxRate.getVatRate();
-        return BPMath.roundCurrency(r);
+        return Toolbox.roundCurrency(r);
     }
 
     /**
@@ -82,9 +80,10 @@ public class SaleLine {
                 retVal += discount;
                 break;
             case RateExtra:
+                retVal = retVal + retVal * discount;
                 break;
         }
-        return BPMath.roundCurrency(retVal);
+        return Toolbox.roundCurrency(retVal);
     }
     private String name;
     private double amount;

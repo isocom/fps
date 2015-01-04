@@ -10,19 +10,21 @@
  */
 package name.prokop.bart.fps.datamodel;
 
-/**
- *
- * @author prokob01
- */
-public class CustomerSamples {
-
-    public static Slip example1() {
-        Slip slip = new Slip();
-        slip.setReference("R-k 0123456789");
-        slip.setCashbox("XX99");
-        slip.setCashierName("Test Testowy");
-        slip.addLine("Żetony", 1, 31, VATRate.VAT23);
-        slip.addPayment(SlipPayment.PaymentType.Cash, 31.0, null);
-        return slip;
+public final class Toolbox {
+    
+    private Toolbox() {
+    }
+    
+    static double round(double val, int radix) {
+        double shift = Math.pow(10, radix);
+        return Math.round(val * shift) / shift;
+    }
+    
+    static double roundCurrency(double val) {
+        return round(val + 0.0000001, 2);
+    }
+    
+    static boolean isNullOrEmpty(String s) {
+        return s == null || "".equals(s.trim());
     }
 }

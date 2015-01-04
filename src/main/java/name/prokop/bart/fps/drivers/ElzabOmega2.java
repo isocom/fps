@@ -20,14 +20,16 @@ import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.VATRate;
-import name.prokop.bart.fps.util.BPMath;
 import name.prokop.bart.fps.util.BitsAndBytes;
 import name.prokop.bart.fps.util.PortEnumerator;
 import name.prokop.bart.fps.util.ToString;
 
 /**
- * Sterownik do drukarki Omega II generacji (sprzedawanych od 1 lipca 2001 roku) i MERA
+ * Sterownik do drukarki Omega II generacji (sprzedawanych od 1 lipca 2001 roku)
+ * i MERA
+ *
  * @author Bart
  */
 public class ElzabOmega2 implements FiscalPrinter {
@@ -46,7 +48,7 @@ public class ElzabOmega2 implements FiscalPrinter {
 
         try {
             //fp.print(Slip.getTestSlip());  - na razie brak rabatów
-            fp.print(Slip.getSampleSlip());
+            fp.print(SlipExamples.getOneCentSlip());
             //fp.print(Slip.getTestNoDiscountSlip());
             //fp.print(Slip.getOneCentSlip());
             //fp.openDrawer();
@@ -169,8 +171,9 @@ public class ElzabOmega2 implements FiscalPrinter {
                         timeout--;
                     } catch (InterruptedException iex) {
                     }
-                    if (timeout==0)
+                    if (timeout == 0) {
                         throw new FiscalPrinterException("CTS is OFF - timeout");
+                    }
                 }
                 serialPort.getOutputStream().write(bb);
             }
@@ -396,22 +399,22 @@ public class ElzabOmega2 implements FiscalPrinter {
     }
 
     private static int countAmountPrecision(double d) throws FiscalPrinterException {
-        if (BPMath.round(d, 4) != d) {
+        if (Toolbox.round(d, 4) != d) {
             throw new FiscalPrinterException("Reduce amount precision");
         }
-        if (BPMath.round(d, 0) == d) {
+        if (Toolbox.round(d, 0) == d) {
             return 0;
         }
-        if (BPMath.round(d, 1) == d) {
+        if (Toolbox.round(d, 1) == d) {
             return 1;
         }
-        if (BPMath.round(d, 2) == d) {
+        if (Toolbox.round(d, 2) == d) {
             return 2;
         }
-        if (BPMath.round(d, 3) == d) {
+        if (Toolbox.round(d, 3) == d) {
             return 3;
         }
-        if (BPMath.round(d, 4) == d) {
+        if (Toolbox.round(d, 4) == d) {
             return 4;
         }
         return 0;
@@ -450,7 +453,6 @@ public class ElzabOmega2 implements FiscalPrinter {
         int total = (int) (100 * slipLine.getTotal() + 0.000001);
 
         //System.out.println(amount + " / " + amountPrecision + " " + amountInteger);
-
         sendToPrinter(new byte[]{0x1B, 0x06, 0x20}); // Esc,06H,20H
         sendToPrinter(prepareName(slipLine.getName())); // K1,....K28
         sendToPrinter(new byte[]{0x00}); // A1

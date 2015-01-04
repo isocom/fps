@@ -11,7 +11,7 @@
 package name.prokop.bart.fps.util;
 
 import name.prokop.bart.fps.FiscalPrinterException;
-import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.drivers.ElzabMera;
 
 /**
@@ -28,7 +28,7 @@ public class HeavyTesting {
         for (int i = 0; i < 50; i++) {
             try {
                 //fp.print(Slip.getTestSlip());
-                fp.print(Slip.getSampleSlip());
+                fp.print(SlipExamples.getSampleSlip());
                 fp.openDrawer();
                 System.out.println("Wydruk OK");
             } catch (FiscalPrinterException e) {

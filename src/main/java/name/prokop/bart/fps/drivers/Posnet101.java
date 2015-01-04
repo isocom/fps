@@ -25,6 +25,7 @@ import name.prokop.bart.fps.FiscalPrinter;
 import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.util.PortEnumerator;
 
 /**
@@ -55,7 +56,7 @@ public class Posnet101 implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getOneCentSlip());
+            fp.print(SlipExamples.getOneCentSlip());
             //fp.print(Slip.getSampleSlip());
             //fp.print(Invoice.getTestInvoice());
             fp.openDrawer();

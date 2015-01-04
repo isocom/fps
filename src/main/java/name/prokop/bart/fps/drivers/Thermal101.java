@@ -27,6 +27,7 @@ import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
 import name.prokop.bart.fps.util.BitsAndBytes;
@@ -54,7 +55,7 @@ public class Thermal101 implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getOneCentSlip());
+            fp.print(SlipExamples.getOneCentSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }

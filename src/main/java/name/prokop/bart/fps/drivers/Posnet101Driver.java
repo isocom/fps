@@ -33,7 +33,6 @@ import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
-import name.prokop.bart.fps.util.BPMath;
 import name.prokop.bart.fps.util.BartDate;
 import name.prokop.bart.fps.util.BitsAndBytes;
 import name.prokop.bart.fps.util.ToString;
@@ -258,11 +257,11 @@ public class Posnet101Driver {
     }
 
     private int encodePrice(double p) {
-        return (int) BPMath.round(p * 100, 0);
+        return (int) Toolbox.round(p * 100, 0);
     }
 
     private int encodeRate(double p) {
-        return (int) BPMath.round(p * 10000, 0);
+        return (int) Toolbox.round(p * 10000, 0);
     }
 
     private String encodeLine(SaleLine line) {

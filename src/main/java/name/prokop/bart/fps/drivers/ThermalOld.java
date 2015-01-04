@@ -20,6 +20,7 @@ import name.prokop.bart.fps.FiscalPrinterException;
 import name.prokop.bart.fps.datamodel.Invoice;
 import name.prokop.bart.fps.datamodel.SaleLine;
 import name.prokop.bart.fps.datamodel.Slip;
+import name.prokop.bart.fps.datamodel.SlipExamples;
 import name.prokop.bart.fps.datamodel.SlipPayment;
 import name.prokop.bart.fps.datamodel.VATRate;
 import name.prokop.bart.fps.util.BitsAndBytes;
@@ -45,7 +46,7 @@ public class ThermalOld implements FiscalPrinter {
         }
 
         try {
-            fp.print(Slip.getSampleSlip());
+            fp.print(SlipExamples.getSampleSlip());
         } catch (FiscalPrinterException e) {
             System.err.println(e);
         }
@@ -391,7 +392,7 @@ public class ThermalOld implements FiscalPrinter {
                 "$e000\r"
                 + total + "/" + // wplata
                 total + "/" // total
-                );
+        );
 
         sendPrefix();
         try {
@@ -446,7 +447,7 @@ public class ThermalOld implements FiscalPrinter {
                 "0/" + // Przyjęcie
                 "0/" + // Wydanie
                 "0/" // Reszta
-                );
+        );
 
         sendPrefix();
         try {
